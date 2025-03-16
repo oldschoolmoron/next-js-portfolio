@@ -1,0 +1,50 @@
+# 🚀 Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ⚙️ Build and cache
+.next/
+out/
+dist/
+.cache/
+
+# ⚡ Vercel & deployment
+.vercel/
+.netlify/
+
+# 📦 Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 🏗️ Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+
+# 🖼️ Image & static cache
+public/static/
+public/images/generated/
+
+# 📄 Logs & debugging
+*.log
+logs/
+*.gz
+debug.log
+
+# 📂 Editor settings & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 🔥 Git merge conflicts
+*.swp
+*.swo
+*.swn
