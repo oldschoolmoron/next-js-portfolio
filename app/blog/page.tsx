@@ -14,8 +14,7 @@ interface BlogPost {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [filter, setFilter] = useState("latest");
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
+  const [filter, setFilter] = useState<"latest" | "oldest">("latest");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +27,7 @@ export default function BlogPage() {
         setPosts(blogPosts);
       } catch (error) {
         console.error("Error fetching blog posts:", error);
+        setPosts([]); // Ensure state is reset on failure
       }
       setLoading(false);
     };
@@ -35,15 +35,12 @@ export default function BlogPage() {
     fetchPosts();
   }, []);
 
-  useEffect(() => {
-    let sortedPosts = [...posts];
-    sortedPosts.sort((a, b) =>
-      filter === "latest"
-        ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-        : new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
-    );
-    setFilteredPosts(sortedPosts);
-  }, [filter, posts]);
+  // Sorted posts are derived from the state
+  const sortedPosts = [...posts].sort((a, b) =>
+    filter === "latest"
+      ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+      : new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
+  );
 
   return (
     <main className="max-w-7xl mx-auto py-12 px-6">
@@ -76,11 +73,11 @@ export default function BlogPage() {
         <select
           id="dateFilter"
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => setFilter(e.target.value as "latest" | "oldest")}
           className="bg-gray-800 text-white px-4 py-2 rounded-lg"
         >
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
+          <option key="latest" value="latest">Latest</option>
+          <option key="oldest" value="oldest">Oldest</option>
         </select>
       </div>
 
@@ -94,8 +91,8 @@ export default function BlogPage() {
       {/* Display filtered posts */}
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
+          {sortedPosts.length > 0 ? (
+            sortedPosts.map((post) => (
               <div
                 key={post.slug}
                 className="rounded-lg overflow-hidden shadow-lg bg-gray-900 bg-opacity-50 p-4 backdrop-blur-md"

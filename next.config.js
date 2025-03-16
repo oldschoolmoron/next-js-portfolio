@@ -1,3 +1,5 @@
+const { withSentryConfig } = require("@sentry/nextjs");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -8,18 +10,24 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "prod-files-secure.s3.us-west-2.amazonaws.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "www.notion.so" }, // ✅ Notion image support
+      { protocol: "https", hostname: "www.notion.so" },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.devtool = 'source-map'; // Ensures source maps are generated for client-side code
+    }
+    return config;
   },
 };
 
-const { withSentryConfig } = require("@sentry/nextjs");
-
-module.exports = withSentryConfig(nextConfig, {
+const sentryWebpackPluginOptions = {
   org: "personal-use-mn",
   project: "javascript-nextjs",
   silent: !process.env.CI,
   widenClientFileUpload: true,
   disableLogger: true,
   automaticVercelMonitors: true,
-});
+};
+
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
