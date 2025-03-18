@@ -15,8 +15,15 @@ const nextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      config.devtool = 'source-map'; // Ensures source maps are generated for client-side code
+      config.devtool = "source-map"; // Ensures source maps are generated for client-side code
     }
+
+    // Add JSON loader
+    config.module.rules.push({
+      test: /\.json$/,
+      loader: "json-loader",
+    });
+
     return config;
   },
 };
@@ -30,13 +37,5 @@ const sentryWebpackPluginOptions = {
   automaticVercelMonitors: true,
 };
 
+// Correctly apply Sentry to the Next.js config
 module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
-module.exports = {
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.json$/,
-      loader: "json-loader",
-    });
-    return config;
-  },
-};
