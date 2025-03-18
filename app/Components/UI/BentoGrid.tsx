@@ -6,7 +6,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import Lottie from "react-lottie";
 import { cn } from "@/Utils/cn";
 import { BackgroundGradientAnimation } from "./background-gradient-animation";
-import animationData from "@/data/confetti.json";
+import animationData from "@/Utils/Confetti.json";
 import MagicButton from "./Magic-button";
 import { GlobeDemo } from "./GridGlop";
 
